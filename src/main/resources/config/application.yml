@@ -6,11 +6,11 @@ async:
 spring:
     datasource:
         dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
-        url: jdbc:mysql://<IP>:3306/<DB>?autoConnect=true
+        url: jdbc:mysql://54.204.15.120:3306/route_tracker?autoConnect=true
         databaseName:
         serverName:
-        username: <user>
-        password: <password>
+        username: root
+        password: stagGOWL123
         cachePrepStmts: true
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048

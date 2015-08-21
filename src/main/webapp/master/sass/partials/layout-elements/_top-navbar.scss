@@ -109,13 +109,13 @@
             overflow-y: visible;
         }
     }
-    
+
     .app-slide-off &, .app-offsidebar-open & {
         @media (max-width: $screen-sm-max) {
             position: absolute !important;
-        }  
+        }
     }
-    
+
     .app-navbar-fixed & {
         @media (min-width: $screen-md-min) {
             .navbar-collapse, .navbar-header {
@@ -469,7 +469,7 @@
                     .media-body {
                         width: auto !important;
                     }
-                    
+
                     ul {
                         > li {
                             a {

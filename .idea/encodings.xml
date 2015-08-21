@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/../PushService/appleRestPushService/src/com/greenowl/pushservice/common/PushMessage.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../PushService/appleRestPushService/src/com/greenowl/pushservice/common/PushServiceProperties.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/certificates/cbs.p12" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/certificates/keystore.p12" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/webapp/assets" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/webapp/bower_components" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/webapp/bower_components/angular-google-maps" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/webapp/bower_components/lodash" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/webapp/index.html" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/webapp/master" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/webapp/templates" charset="windows-1252" />
+  </component>
+</project>

@@ -1,5 +1,7 @@
 package com.greenowl.tracker.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
@@ -25,6 +27,11 @@ public class Point {
 
     private Double altitude;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_route_id", referencedColumnName = "id", nullable = false)
+    private Route route;
+
     public Point() {
     }
 
@@ -36,10 +43,6 @@ public class Point {
         this.bearing = bearing;
         this.altitude = altitude;
     }
-
-    @ManyToOne
-    @JoinColumn(name = "parent_route_id", referencedColumnName = "id", nullable = false)
-    private Route route; // The Dido Entity being liked
 
     public Long getId() {
         return id;

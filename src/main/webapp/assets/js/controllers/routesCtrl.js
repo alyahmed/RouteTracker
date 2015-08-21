@@ -3,96 +3,75 @@
  * controllers for GoogleMap
  * AngularJS Directive
  */
-app.controller('RoutesCtrl', ["$scope", "$compile", function ($scope, $compile) {
-    var TILE_SIZE = 256;
+app.controller('RoutesCtrl', ["$scope", "$http", function ($scope, $http) {
 
-    function bound(value, opt_min, opt_max) {
-        if (opt_min != null)
-            value = Math.max(value, opt_min);
-        if (opt_max != null)
-            value = Math.min(value, opt_max);
-        return value;
-    }
+    $scope.loading = false;
+    $scope.polylines = null;
+    $scope.markers = [];
+    $scope.routes = [];
 
-    function degreesToRadians(deg) {
-        return deg * (Math.PI / 180);
-    }
-
-    function radiansToDegrees(rad) {
-        return rad / (Math.PI / 180);
-    }
-
-    function MercatorProjection() {
-        this.pixelOrigin_ = new google.maps.Point(TILE_SIZE / 2, TILE_SIZE / 2);
-        this.pixelsPerLonDegree_ = TILE_SIZE / 360;
-        this.pixelsPerLonRadian_ = TILE_SIZE / (2 * Math.PI);
-    }
-
-
-    MercatorProjection.prototype.fromLatLngToPoint = function (latLng, opt_point) {
-        var me = this;
-        var point = opt_point || new google.maps.Point(0, 0);
-        var origin = me.pixelOrigin_;
-
-        point.x = origin.x + latLng.lng() * me.pixelsPerLonDegree_;
-
-        // Truncating to 0.9999 effectively limits latitude to 89.189. This is
-        // about a third of a tile past the edge of the world tile.
-        var siny = bound(Math.sin(degreesToRadians(latLng.lat())), -0.9999, 0.9999);
-        point.y = origin.y + 0.5 * Math.log((1 + siny) / (1 - siny)) * -me.pixelsPerLonRadian_;
-        return point;
+    $scope.map = {
+        center: {latitude: 43.6830971, longitude: -79.8196407},
+        zoom: 12,
+        markers: $scope.markers,
+        events: null
     };
 
-    MercatorProjection.prototype.fromPointToLatLng = function (point) {
-        var me = this;
-        var origin = me.pixelOrigin_;
-        var lng = (point.x - origin.x) / me.pixelsPerLonDegree_;
-        var latRadians = (point.y - origin.y) / -me.pixelsPerLonRadian_;
-        var lat = radiansToDegrees(2 * Math.atan(Math.exp(latRadians)) - Math.PI / 2);
-        return new google.maps.LatLng(lat, lng);
-    };
 
-    $scope.$on('mapInitialized', function (event, map) {
-        var numTiles = 1 << map.getZoom();
-        var projection = new MercatorProjection();
-        $scope.chicago = map.getCenter();
-        $scope.worldCoordinate = projection.fromLatLngToPoint($scope.chicago);
-        $scope.pixelCoordinate = new google.maps.Point($scope.worldCoordinate.x * numTiles, $scope.worldCoordinate.y * numTiles);
-        $scope.tileCoordinate = new google.maps.Point(Math.floor($scope.pixelCoordinate.x / TILE_SIZE), Math.floor($scope.pixelCoordinate.y / TILE_SIZE));
-    });
-}]);
-app.controller('EventSimpleCtrl', ['$scope', '$timeout',
-    function ($scope, $timeout) {
-        var marker, map;
-        $scope.$on('mapInitialized', function (evt, evtMap) {
-            map = evtMap;
-            marker = map.markers[0];
+    $scope.getPoints = function(){
+        $scope.loading = true;
+        $http.get('api/route/points?routeId=8').then(function (response) {
+            $scope.points = response.data;
+            $scope.drawMarkers($scope.points);
+        }, function (response) {
+            // TODO: handle the error somehow
+            alert("Error");
+        }).finally(function () {
+            // called no matter success or failure
+            $scope.loading = false;
         });
-        $scope.centerChanged = function (event) {
-            $timeout(function () {
-                map.panTo(marker.getPosition());
-            }, 3000);
+    };
+
+    $scope.drawMarkers = function(points){
+        for(var i = 0; i < points.length; i++){
+            var p = points[i];
+            $scope.pushMarker(p.lat, p.lon, i, i);
         }
-        $scope.click = function (event) {
-            map.setZoom(8);
-            map.setCenter(marker.getPosition());
+    };
+
+
+    $scope.pushMarker = function (lat, lng, title, id) {
+        $scope.markers.push({
+            idKey: id,
+            coords: {
+                latitude: lat,
+                longitude: lng
+            },
+            title: title,
+            events: $scope.markerEvents,
+            options: {
+                icon: {
+                    scaledSize: new google.maps.Size(30, 30)
+                }
+            }
+        });
+    };
+
+    /**
+     * All Event listeners for markers on the primary google map.
+     * @type {{click: Function}}
+     */
+    $scope.markerEvents = {
+        //marker Events
+        click: function (marker, eventName, args) {
+            var title = marker.model.title;
+            if (!(title)) {
+                title = "N/A";
+            }
+            alert(title);
         }
-    }]);
-app.controller('EventPropertiesCtrl', ["$scope", function ($scope) {
-    $scope.$on('mapInitialized', function (evt, map) {
-        var infoWindow = map.infoWindows[1];
-        $scope.zoomChanged = function (e) {
-            infoWindow.setContent('Zoom: ' + map.getZoom());
-            map.setCenter(infoWindow.getPosition());
-        }
-    });
-}]);
-app.controller('ControlCustomStateCtrl', ["$scope", function ($scope) {
-    $scope.home = new google.maps.LatLng(41.850033, -87.6500523);
-    $scope.goHome = function () {
-        $scope.map.setCenter($scope.home);
-    }
-    $scope.setHome = function () {
-        $scope.home = $scope.map.getCenter();
-    }
+    }; //Marker Only Events
+
+
+    console.log("finished loading RoutesCtrl.");
 }]);

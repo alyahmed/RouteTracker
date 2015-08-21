@@ -4,6 +4,8 @@ import com.greenowl.tracker.domain.Point;
 import com.greenowl.tracker.domain.Route;
 import com.greenowl.tracker.web.dto.ClientLocation;
 import com.greenowl.tracker.web.dto.CreateRouteRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,6 +14,8 @@ import java.util.Set;
 
 public class RouteFactory {
 
+    private static final Logger LOG = LoggerFactory.getLogger(RouteFactory.class);
+
     /**
      * Create a Route from a CreateRouteRequest.
      * @param req
@@ -19,17 +23,11 @@ public class RouteFactory {
      */
     public static Route create(CreateRouteRequest req){
         List<ClientLocation> cps = req.getLocations();
-        Set<Point> points = new HashSet<>();
-        for(ClientLocation cp : cps){
-            points.add(createPoint(cp));
-        }
-        return new Route(req.getDeviceId(), points);
+        Route route = new Route();
+        route.setDeviceId(req.getDeviceId());
+        LOG.info("Creating new Route with deviceId = {}", req.getDeviceId());
+        return route;
     }
 
-
-    private static Point createPoint(ClientLocation loc){
-        return new Point(loc.getLat(), loc.getLon(), loc.getSpeed()
-        , loc.getAccuracy(), loc.getBearing(), loc.getAltitude());
-    }
 
 }

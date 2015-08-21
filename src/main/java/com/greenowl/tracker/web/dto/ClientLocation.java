@@ -12,6 +12,7 @@ public class ClientLocation {
     private Float bearing;
     private Double altitude;
     private Long time;
+    private String deviceCalc;
 
     public Double getLat() {
         return lat;
@@ -67,6 +68,14 @@ public class ClientLocation {
 
     public void setTime(Long time) {
         this.time = time;
+    }
+
+    public String getDeviceCalc() {
+        return deviceCalc;
+    }
+
+    public void setDeviceCalc(String deviceCalc) {
+        this.deviceCalc = deviceCalc;
     }
 
     @Override

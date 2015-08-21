@@ -26,7 +26,7 @@ public class Route{
         this.points = points;
     }
 
-    @OneToMany(mappedBy = "route", targetEntity = Point.class)
+    @OneToMany(mappedBy = "route", targetEntity = Point.class, fetch = FetchType.EAGER)
     private Set<Point> points = new HashSet<>();
 
     public Long getId() {
@@ -58,7 +58,6 @@ public class Route{
         return "Route{" +
                 "id=" + id +
                 ", deviceId='" + deviceId + '\'' +
-                ", points=" + points +
                 '}';
     }
 }

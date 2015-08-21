@@ -13,6 +13,7 @@ public class CreateRouteRequest {
     @JsonProperty("driveLocations")
     private List<ClientLocation> locations;
 
+    private String platform; // ANDROID or IPHONE
 
     public String getDeviceId() {
         return deviceId;
@@ -28,6 +29,14 @@ public class CreateRouteRequest {
 
     public void setLocations(List<ClientLocation> locations) {
         this.locations = locations;
+    }
+
+    public String getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(String platform) {
+        this.platform = platform;
     }
 
     @Override

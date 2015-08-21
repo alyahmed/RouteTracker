@@ -332,6 +332,14 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Maps'
         }
+    }).state('app.routesList', {
+        url: "/routes/list",
+        templateUrl: "assets/views/listRoutes.html",
+        resolve: loadSequence('ngMap', 'listRoutesCtrl'),
+        title: "List of All Routes",
+        ncyBreadcrumb: {
+            label: 'Routes'
+        }
     }).state('app.routes', {
         url: "/routes",
         templateUrl: "assets/views/routes.html",
@@ -340,7 +348,8 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Routes'
         }
-    }).state('app.charts', {
+    })
+        .state('app.charts', {
         url: "/charts",
         templateUrl: "assets/views/charts.html",
         resolve: loadSequence('chartjs', 'tc.chartjs', 'chartsCtrl'),
